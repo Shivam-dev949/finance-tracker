@@ -2,6 +2,69 @@ import streamlit as st
 import pandas as pd
 import hashlib
 from database.db import initialize_database, get_connection
+# ---------------- PAGE CONFIG ---------------- #
+st.set_page_config(
+    page_title="Finance Tracker",
+    page_icon="💰",
+    layout="wide"
+)
+
+# ---------------- SESSION STATE ---------------- #
+if "theme" not in st.session_state:
+    st.session_state.theme = "Light"
+
+# ---------------- THEME FUNCTION ---------------- #
+def apply_theme(theme):
+    if theme == "Dark":
+        st.markdown("""
+            <style>
+            .stApp {
+                background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+                color: white;
+            }
+            .block-container {
+                padding: 2rem 3rem;
+            }
+            .card {
+                background: rgba(255, 255, 255, 0.05);
+                padding: 20px;
+                border-radius: 15px;
+                backdrop-filter: blur(10px);
+                box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+                margin-bottom: 20px;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+    else:
+        st.markdown("""
+            <style>
+            .stApp {
+                background: linear-gradient(135deg, #ffffff, #f0f2f6);
+                color: black;
+            }
+            .block-container {
+                padding: 2rem 3rem;
+            }
+            .card {
+                background: white;
+                padding: 20px;
+                border-radius: 15px;
+                box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+                margin-bottom: 20px;
+            }
+            </style>
+        """, unsafe_allow_html=True)
+
+# ---------------- SIDEBAR ---------------- #
+st.sidebar.title("⚙ Settings")
+theme_toggle = st.sidebar.toggle("🌙 Dark Mode")
+
+if theme_toggle:
+    st.session_state.theme = "Dark"
+else:
+    st.session_state.theme = "Light"
+
+apply_theme(st.session_state.theme)
 
 # ---------------- INITIALIZE DB ---------------- #
 initialize_database()
